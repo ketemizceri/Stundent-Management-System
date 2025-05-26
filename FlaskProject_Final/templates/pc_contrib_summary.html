@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4 text-info">📊 PÇ Katkı Potansiyeli vs Gerçek</h2>
+  <canvas id="pcChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const labels    = {{ summary|map(attribute='pc.code')    | list | tojson }};
+const potential = {{ summary|map(attribute='potential')  | list | tojson }};
+const achieved  = {{ summary|map(attribute='achieved')   | list | tojson }};
+
+if (labels.length === 0) {
+  document.getElementById('pcChart').outerHTML =
+    "<p class='text-muted'>Gösterilecek veri bulunamadı.</p>";
+} else {
+  new Chart(document.getElementById('pcChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'Potansiyel Katkı', data: potential,
+          backgroundColor:'rgba(150,150,255,0.6)' },
+        { label:'Gerçek Katkı',    data: achieved,
+          backgroundColor:'rgba(46,170,90,0.9)' }
+      ]
+    },
+    options:{
+      plugins:{ legend:{ position:'top' } },
+      scales :{ y:{ beginAtZero:true, precision:0 } }
+    }
+  });
+}
+</script>
+{% endblock %}

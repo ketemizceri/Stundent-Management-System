@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Not Yükleme (.csv)</h2>
+
+<form method="post" enctype="multipart/form-data" class="mb-4">
+  <label for="fileInput" class="form-label">CSV Dosyasını Seçiniz</label>
+  <input id="fileInput" type="file" name="file" accept=".csv" class="form-control mb-3" required>
+  <button type="submit" class="btn btn-primary">Yükle</button>
+</form>
+
+<p class="text-muted">CSV formatı şu şekilde olmalıdır:</p>
+<pre class="bg-light p-3 border rounded">
+student_number,course_code,exam_name,score
+1001,CS101,Vize,85
+1002,CS101,Final,75
+</pre>
+
+{% if error %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+{% endif %}
+{% if success %}
+  <div class="alert alert-success" role="alert">
+    {{ success }}
+  </div>
+{% endif %}
+
+{% endblock %}

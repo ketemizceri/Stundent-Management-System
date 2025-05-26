@@ -1,0 +1,35 @@
+body {
+  background: black;
+  color: #eeee;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: blue;
+  text-align: center;
+  font-size: 200px;
+}
+
+/* Buton konteyneri */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 400px 300px 400px 300px;
+}
+
+/* Butonların görünümü */
+.nav-button {
+  background-color: #222;
+  color: white;
+  padding: 20px 40px;
+  text-decoration: none;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 100px;
+  transition: 0.3s;
+}
+
+.nav-button:hover {
+  background-color: white;
+  color: black;
+}

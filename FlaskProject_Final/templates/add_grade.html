@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-4">
+  <h3 class="mb-4 text-primary">{{ student.name }} {{ student.surname }} için Not Girişi</h3>
+
+  <form method="post" class="row gy-3 gx-3 w-100 w-md-50">
+    <div class="col-12">
+      <label for="course_id" class="form-label">📘 Ders Seçimi</label>
+      <select name="course_id" id="course_id" class="form-select" required>
+        <option value="" disabled selected>Ders seçiniz...</option>
+        {% for c in courses %}
+          <option value="{{ c.id }}">{{ c.code }} – {{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-12">
+      <label for="exam_name" class="form-label">📝 Sınav Türü</label>
+      <select name="exam_name" id="exam_name" class="form-select" required>
+        <option value="Vize">Vize</option>
+        <option value="Final">Final</option>
+        <option value="Bütünleme">Bütünleme</option>
+        <option value="Ara Sınav">Ara Sınav</option>
+      </select>
+    </div>
+
+    <div class="col-12">
+      <label for="score" class="form-label">🎯 Not</label>
+      <input name="score" id="score" class="form-control" type="number" min="0" max="100" step="1" placeholder="0 - 100 arası" required>
+    </div>
+
+    <div class="col-12 d-flex justify-content-between mt-3">
+      <a href="{{ url_for('students.view_student', id=student.id) }}" class="btn btn-outline-secondary">⬅ Geri</a>
+      <button class="btn btn-success">💾 Ekle</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

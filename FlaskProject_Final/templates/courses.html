@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="text-warning mb-4">📚 Dersler</h2>
+
+  <!-- 🔍 FİLTRE FORMU (select + arama) -->
+  <form method="get" class="row g-2 mb-4" id="filterForm">
+    <div class="col-md-4">
+      <input type="text" name="q" value="{{ q or '' }}" class="form-control"
+             placeholder="Kod, ad veya eğitmen ara">
+    </div>
+
+    <!-- Sınıf seçimi her zaman formun İÇİNDE -->
+    <div class="col-md-3">
+      <select name="year" class="form-select"
+              onchange="document.getElementById('filterForm').submit()">
+        <option value="all" {{ 'selected' if year=='all' }}>Tüm Sınıflar</option>
+        <option value="1"   {{ 'selected' if year=='1' }}>1. Sınıf</option>
+        <option value="2"   {{ 'selected' if year=='2' }}>2. Sınıf</option>
+        <option value="3"   {{ 'selected' if year=='3' }}>3. Sınıf</option>
+        <option value="4"   {{ 'selected' if year=='4' }}>4. Sınıf</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-info w-100">Ara</button>
+    </div>
+  </form>
+
+  <!-- (geri kalan tablo + ekleme formu aynı kalıyor) -->
+
+  <!-- DERS TABLOSU -->
+  <table class="table table-dark table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th><th>Kod</th><th>Adı</th><th>Kredi</th>
+        <th>Eğitmen</th><th>Ders Yılı</th><th class="text-center">İşlem</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for c in courses %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ c.code }}</td><td>{{ c.name }}</td>
+        <td>{{ c.credit }}</td><td>{{ c.lecturer }}</td>
+        <td>{{ c.year }}. Sınıf</td>
+        <td class="text-center">
+          <form method="post" action="{{ url_for('courses.delete_course', id=c.id) }}"
+                onsubmit="return confirm('⚠️ Bu ders silinecek ve tüm not & katkıları kaldırılacak. Emin misiniz?')">
+            <input type="hidden" name="confirm" value="yes">
+            <button class="btn btn-sm btn-danger">Sil</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="text-center text-muted">📭 Ders bulunamadı.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <hr class="my-5">
+
+  <!-- ─────────── Yeni Ders Ekle ─────────── -->
+  <h4 class="mb-3">🆕 Yeni Ders Ekle</h4>
+  <form method="post" action="{{ url_for('courses.add_course') }}" class="row gy-3 gx-3 align-items-end">
+    <div class="col-md-2">
+      <label class="form-label">Ders Kodu</label>
+      <input name="code" class="form-control" placeholder="CS101" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Ders Adı</label>
+      <input name="name" class="form-control" placeholder="Programlamaya Giriş" required>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Kredi</label>
+      <input name="credit" type="number" class="form-control" placeholder="3" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Eğitmen</label>
+      <input name="lecturer" class="form-control" placeholder="Dr. Ahmet Yılmaz" required>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Yıl</label>
+      <select name="year" class="form-select" required>
+        <option value="">Seçiniz</option>
+        <option value="1">1. Yıl</option>
+        <option value="2">2. Yıl</option>
+        <option value="3">3. Yıl</option>
+        <option value="4">4. Yıl</option>
+      </select>
+    </div>
+    <div class="col-12 text-end">
+      <button class="btn btn-success px-4">➕ Ekle</button>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

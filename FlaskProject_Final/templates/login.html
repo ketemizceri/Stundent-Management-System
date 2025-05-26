@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container py-5 d-flex justify-content-center">
+  <div class="card shadow-lg p-4 w-100" style="max-width: 400px;">
+    <h3 class="mb-4 text-center text-primary">🔐 Admin Giriş</h3>
+
+    <form method="post">
+      <div class="mb-3">
+        <label for="username" class="form-label">👤 Kullanıcı Adı</label>
+        <input name="username" id="username" class="form-control" placeholder="admin" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">🔑 Şifre</label>
+        <input name="password" id="password" type="password" class="form-control" placeholder="••••••••" required>
+      </div>
+
+      <button class="btn btn-primary w-100">Giriş Yap</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ title|default("Ana Sayfa") }}</title>
+<!-- Bootstrap CSS CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+  color: #f8f9fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+body {
+  padding: 2rem;
+}
+
+/* Animasyonlu arkaplan parçacıkları */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(2deg); }
+  66% { transform: translateY(10px) rotate(-1deg); }
+}
+
+h1 {
+  font-weight: 900;
+  font-size: 4.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+  margin-bottom: 3.5rem;
+  text-align: center;
+  user-select: none;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { filter: brightness(1) drop-shadow(0 0 10px rgba(102, 126, 234, 0.3)); }
+  to { filter: brightness(1.1) drop-shadow(0 0 20px rgba(102, 126, 234, 0.6)); }
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: #b8c6db;
+  text-align: center;
+  margin-bottom: 4rem;
+  opacity: 0.9;
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.nav-button {
+  flex: 1 1 320px;
+  min-width: 320px;
+  text-align: center;
+  padding: 2.5rem 2.5rem;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 10px 30px rgba(102, 126, 234, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  position: relative;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.nav-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-button:hover::before {
+  left: 100%;
+}
+
+.nav-button:hover, .nav-button:focus {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  transform: translateY(-8px) scale(1.02);
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 
+    0 20px 40px rgba(118, 75, 162, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  outline: none;
+}
+
+.nav-button:active {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.nav-button .icon {
+  font-size: 2.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.nav-button .text {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+  }
+  
+  .nav-button {
+    flex: 1 1 280px;
+    min-width: 280px;
+    padding: 2rem 1.5rem;
+    font-size: 1.6rem;
+  }
+  
+  .nav-button .icon {
+    font-size: 2.4rem;
+  }
+  
+  .nav-button .text {
+    font-size: 1.2rem;
+  }
+  
+  .button-container {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .nav-button {
+    flex: 1 1 100%;
+    min-width: 100%;
+    padding: 1.8rem 1.2rem;
+  }
+}
+
+/* Hover efekti için parçacık animasyonu */
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1) rotate(180deg); opacity: 0.8; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<h1>{{ title|default("KTÜ Öğrenci Yönetim Sistemi") }}</h1>
+<p class="subtitle">Eğitim sürecinizi kolayca yönetin ve takip edin</p>
+
+<div class="button-container">
+  <a href="{{ url_for('students.list_students') }}" class="nav-button" aria-label="Öğrenci İşlemleri">
+    <span class="icon">🎓</span>
+    <span class="text">Öğrenci İşlemleri</span>
+  </a>
+
+  <a href="{{ url_for('courses.list_courses') }}" class="nav-button" aria-label="Ders İşlemleri">
+    <span class="icon">📚</span>
+    <span class="text">Ders İşlemleri</span>
+  </a>
+
+  <a href="{{ url_for('view_mapping.pc_matrix') }}" class="nav-button" aria-label="Kazanım Matrisi">
+    <span class="icon">🗺️</span>
+    <span class="text">Kazanım Matrisi</span>
+  </a>
+
+  <a href="{{ url_for('pc_mapping.map_pc') }}" class="nav-button" aria-label="PÇ Katkı Eşlemesi">
+    <span class="icon">🧩</span>
+    <span class="text">PÇ Katkı Eşlemesi</span>
+  </a>
+
+  <a href="{{ url_for('upload.upload_csv') }}" class="nav-button" aria-label="Not Yükleme">
+    <span class="icon">📥</span>
+    <span class="text">Not Yükleme (.csv)</span>
+  </a>
+
+  <a href="{{ url_for('pc_contrib.summary') }}" class="nav-button" aria-label="PÇ Grafiği">
+    <span class="icon">📈</span>
+    <span class="text">PÇ Grafiği</span>
+  </a>
+
+  <a href="{{ url_for('course_stats.summary') }}" class="nav-button" aria-label="Ders Geçme Durum Bilgisi">
+    <span class="icon">📊</span>
+    <span class="text">Ders Geçme Durum Bilgisi</span>
+  </a>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

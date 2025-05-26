@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>{{ student.number }} Numaralı Öğrencinin Kazanım Tablosu</h2>
+
+<table class="table table-bordered table-dark table-sm text-center align-middle">
+    <thead>
+        <tr>
+            <th>Ders Kodu</th>
+            <th class="text-start">Ders Adı</th>
+            {% for pc in pcs %}
+                <th>{{ pc.code }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in all_courses %}
+        <tr {% if course.id in failed_course_ids %} class="table-danger" {% endif %}>
+            <td>{{ course.code }}</td>
+            <td class="text-start">{{ course.name }}</td>
+            {% for pc in pcs %}
+                {% set value = mapping.get(course.id, {}).get(pc.id, 0) %}
+                <td>
+                    {% if value == 25 %}
+                        <span class="text-warning fw-bold">X</span>
+                    {% elif value == 50 %}
+                        <span class="text-primary fw-bold">X</span>
+                    {% elif value == 75 %}
+                        <span class="text-success fw-bold">X</span>
+                    {% elif value == 100 %}
+                        <span class="text-danger fw-bold">X</span>
+                    {% else %}
+                        –
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Grafik Verilerini taşıyan gizli alan -->
+<div id="chartData"
+     data-kazanımlar='{{ kazanim_kodlari | tojson | safe }}'
+     data-ogrenci='{{ student_scores | tojson | safe }}'
+     data-ortalama='{{ avg_scores | tojson | safe }}'>
+</div>
+
+<h3 class="mt-5">Kazanım Dağılımı Grafikleri</h3>
+
+<div class="mb-5">
+    <canvas id="studentChart" width="600" height="200" class="mb-4"></canvas>
+    <canvas id="avgChart" width="600" height="200"></canvas>
+</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/outcomes_chart.js') }}"></script>
+
+<a href="{{ url_for('students.view_student', id=student.id) }}" class="btn btn-secondary mt-3">
+    ← Geri Dön
+</a>
+
+{% endblock %}

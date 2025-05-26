@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+  <h2 class="text-warning mb-3">Öğrenciler</h2>
+
+  <!-- 🔍 ARAMA FORMU -->
+  <form method="get" class="row g-2 mb-4">
+    <div class="col">
+      <input type="text" name="q" value="{{ q or '' }}" class="form-control"
+             placeholder="İsim, soyisim veya numara ara">
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-info">Ara</button>
+    </div>
+  </form>
+
+  <table class="table table-dark table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Numara</th>
+        <th>İsim</th>
+        <th>Soyisim</th>
+        <th>Telefon Numarası</th>
+        <th>Sınıf Bilgisi</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for s in students %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+          <a href="{{ url_for('students.view_student', id=s.id) }}" class="text-decoration-none text-info">
+            {{ s.number }}
+          </a>
+        </td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.surname }}</td>
+        <td>{{ s.phone_number }}</td>
+        <td>
+          {% if s.grade == 5 %}
+            <span class="badge bg-secondary">Mezun</span>
+          {% else %}
+            <span class="badge bg-primary">{{ s.grade }}. Sınıf</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('students.delete_student', id=s.id) }}" 
+             class="btn btn-sm btn-danger" 
+             onclick="return confirm('Öğrenciyi silmek istediğinize emin misiniz?');">
+             Sil
+          </a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="7" class="text-center text-muted">Henüz öğrenci yok</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <hr class="my-5">
+
+  <h5 class="mb-3">Yeni Öğrenci Ekle</h5>
+  <form action="{{ url_for('students.add_student') }}" method="post" class="row g-3 w-75 mx-auto">
+    <div class="col-md-2">
+      <input name="number" class="form-control" placeholder="Numara" required>
+    </div>
+    <div class="col-md-2">
+      <input name="name" class="form-control" placeholder="İsim" required>
+    </div>
+    <div class="col-md-2">
+      <input name="surname" class="form-control" placeholder="Soyisim" required>
+    </div>
+    <div class="col-md-3">
+      <input name="phone_number" class="form-control" placeholder="Telefon Numarası"
+             pattern="\+?\d{10,15}" title="Telefon numarasını doğru formatta giriniz.">
+    </div>
+    <div class="col-md-2">
+      <select name="grade" class="form-select" required>
+        <option value="1">1. Sınıf</option>
+        <option value="2">2. Sınıf</option>
+        <option value="3">3. Sınıf</option>
+        <option value="4">4. Sınıf</option>
+        <option value="5">Mezun</option>
+      </select>
+    </div>
+    <div class="col-md-1 d-grid">
+      <button type="submit" class="btn btn-success">Ekle</button>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4 text-warning">Öğrenci Bilgileri: {{ student.name }} {{ student.surname }}</h2>
+
+<!-- Bilgi Güncelleme Formu -->
+<form method="post" class="w-75 mb-5 mx-auto" onsubmit="return confirmGradeChange()">
+  <div class="mb-3">
+    <label for="name" class="form-label">İsim</label>
+    <input id="name" name="name" value="{{ student.name }}" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label for="surname" class="form-label">Soyisim</label>
+    <input id="surname" name="surname" value="{{ student.surname }}" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label for="phone_number" class="form-label">Telefon</label>
+    <input id="phone_number" name="phone_number" value="{{ student.phone_number }}" class="form-control" pattern="\+?\d{10,15}" title="Telefon numarasını doğru formatta giriniz.">
+  </div>
+  <div class="mb-3">
+    <label for="grade" class="form-label">Sınıf</label>
+    <select id="grade" name="grade" class="form-select" required>
+      {% for i in range(1, 5) %}
+        <option value="{{ i }}" {% if student.grade == i %}selected{% endif %}>{{ i }}. Sınıf</option>
+      {% endfor %}
+      <option value="5" {% if student.grade == 5 %}selected{% endif %}>Mezun</option>
+    </select>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary">Öğrenciyi Güncelle</button>
+    <a href="{{ url_for('students.list_students') }}" class="btn btn-secondary">Geri Dön</a>
+  </div>
+</form>
+
+<script>
+function confirmGradeChange() {
+  const oldGrade = parseInt("{{ student.grade }}");
+  const newGrade = parseInt(document.querySelector('select[name="grade"]').value);
+  if (newGrade < oldGrade) {
+    return confirm("⚠️ Sınıf düşürülüyor. Bu işlem öğrencinin notlarını silecek. Devam etmek istiyor musun?");
+  }
+  return true;
+}
+</script>
+
+<!-- Not Ekleme -->
+{% if courses %}
+<hr>
+<h4 class="mt-5 mb-3 text-warning">Not Ekle</h4>
+
+<form method="post" class="row g-3 w-75 mx-auto">
+  <input type="hidden" name="grade_form" value="1">
+
+  <div class="col-md-6">
+    <label for="course_id" class="form-label">Ders</label>
+    <select id="course_id" name="course_id" class="form-select" required>
+      {% for c in courses %}
+        <option value="{{ c.id }}" {% if c.id|string == selected_course_id %}selected{% endif %}>
+          {{ c.code }} – {{ c.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <label for="exam_name" class="form-label">Sınav Türü</label>
+    <select id="exam_name" name="exam_name" class="form-select" required>
+      <option value="Vize" {% if exam_name == 'Vize' %}selected{% endif %}>Vize</option>
+      <option value="Final" {% if exam_name == 'Final' %}selected{% endif %}>Final/Büt</option>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <label for="score" class="form-label">Not</label>
+    <input id="score" name="score" class="form-control" type="number" min="0" max="100" required>
+  </div>
+
+  <div class="col-12 d-flex justify-content-end">
+    <button class="btn btn-success">Not Ekle</button>
+  </div>
+</form>
+{% else %}
+<p class="text-muted text-center mt-4">Bu öğrencinin not girilebileceği ders bulunmuyor.</p>
+{% endif %}
+
+<!-- Not Tablosu -->
+{% if results %}
+<hr>
+<h4 class="mt-5 mb-3 text-warning">Öğrencinin Notları</h4>
+
+<table class="table table-dark table-striped w-75 mx-auto">
+  <thead>
+    <tr>
+      <th>Ders Kodu</th>
+      <th>Ders Adı</th>
+      <th>Sınav Türü</th>
+      <th>Not</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in results %}
+    <tr>
+      <td>{{ r.course.code }}</td>
+      <td>{{ r.course.name }}</td>
+      <td>{{ r.exam_name }}</td>
+      <td>{{ r.score }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Kazanım Butonu -->
+<div class="text-center mt-4">
+  <a href="{{ url_for('results.student_outcomes', student_id=student.id) }}" class="btn btn-info">
+    🎓 Öğrenci Kazanımlarını Görüntüle
+  </a>
+</div>
+{% endif %}
+
+{% endblock %}
